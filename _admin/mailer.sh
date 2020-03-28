@@ -1,5 +1,5 @@
 #!/bin/bash
-# send - sends files to email ($i)
+# mailer.sh - sends files to email ($i)
 #
 
 EXITCODE=0
