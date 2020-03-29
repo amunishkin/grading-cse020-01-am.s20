@@ -14,7 +14,7 @@
 ## How to run student group tester and logger (lab01.sh)
 
 
-* Make sure to copy both "lab01.sh" and "lab01_student.sh" in same 
+* Make sure to move both "lab01.sh" and "lab01_student.sh" in same 
     directory as where all student directories are located
 * Run by clicking on lab01.sh or open a terminal and type
     "sh lab01.sh"
