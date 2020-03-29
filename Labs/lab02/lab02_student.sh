@@ -63,7 +63,10 @@ if [ -s py.files ]; then        # Only if py file exists
     cat run4.txt | python $name &> run4.messages
     ###################################
     #trap '-'
-    ls *.messages | grep -l "Traceback" > err.messages
+    grep -l "Traceback" run1.messages > err.messages
+    grep -l "Traceback" run2.messages >> err.messages
+    grep -l "Traceback" run3.messages >> err.messages
+    grep -l "Traceback" run4.messages >> err.messages
       
     # print code run
     echo "---------- python run1 -----------" >> $REPORT
@@ -84,6 +87,32 @@ if [ -s py.files ]; then        # Only if py file exists
     grep -n "" run4.messages >> $REPORT
     echo "----------------------------------" >> $REPORT
     #
+
+    # check run1 output
+    grep -l "Wow, the temperature is so hot!" run1.messages > run.out
+    if [ ! -s run.out ]; then
+      echo "Run1's output is not correct (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
+    fi
+    # check run2 output
+    grep -l "Wow, your height is larger than the temperature!" run2.messages > run.out
+    if [ ! -s run.out ]; then
+      echo "Run2's output is not correct (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
+    fi
+    # check run3 output
+    grep -l "Interesting... should only happen if height is zero???" run3.messages > run.out
+    if [ ! -s run.out ]; then
+      echo "Run3's output is not correct (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
+    fi
+    # check run4 output
+    grep -l "Oh no, our math is wrong :(" run4.messages > run.out
+    if [ ! -s run.out ]; then
+      echo "Run4's output is not correct (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
+    fi
+    rm run.out
 
     # error messages check
     if [ -s err.messages ]; then
