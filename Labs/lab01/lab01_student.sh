@@ -91,8 +91,8 @@ echo "" >> $REPORT
 # finalizes grade -------------------------------
 #
 echo "##################" >> $REPORT
-echo "# GRADE = $GRADE/100 #" >> $REPORT
-echo " GRADE = $GRADE/100 "
+echo "# GRADE = $GRADE #" >> $REPORT
+echo " GRADE = $GRADE "
 echo "##################" >> $REPORT
 echo "" >> $REPORT
 #

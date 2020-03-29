@@ -4,8 +4,10 @@
 # cse20-01 (Beginning Programming in Python) - Spring 2020
 #
 
-DIR=/afs/cats.ucsc.edu/class/cmps011-pt.s15/spa1
-#DIR=~/private/_grading/tests
+echo ""
+echo " START ALL ... students' lab1 grading"
+echo ""
+#################################################
 
 CVS=report.csv
 echo "" > report.csv # rewrite each run of program
@@ -13,19 +15,24 @@ echo "" > report.csv # rewrite each run of program
 #
 # iterates through directory list
 #
-for i in $(ls ${DIR}); do
+for i in $(ls .); do
   
-  if [ -d "${DIR}/${i}" ]; then
-    GRADE  = 80
-    REPORT = grade
-    
-    sh lab01_student.sh
+  if [ -d "$i" ]; then
+    echo "Inside $i ..." 
+    cp lab01_student.sh $i  # copy individual script
+    cd $i
     #
-    mv $REPORT ${DIR}/${i}
+    sh lab01_student.sh
+    rm lab01_student.sh     # now remove it
+    #
+    cd ..
+    GRADE=$(grep "GRADE" $i/grade.txt | grep -oE "[0-9]+")
+    echo "$i,$GRADE" >> $CVS
   fi
 done
 
+#################################################
 echo ""
-echo "DONE"
+echo " FINISH ALL ... students' lab1 grading"
 echo ""
 
