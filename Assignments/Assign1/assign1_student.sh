@@ -50,17 +50,54 @@ if [ -s py.files ]; then        # Only if py file exists
       basename="$line"
     done < base.name
     rm base.name
-
-    ### CHECK BELOW ###
      
     #trap '' INT
     ###################################
-    # Run1:
-    cat run1.txt | python $name &> run1.messages
-    # Run2:
-    cat run2.txt | python $name &> run2.messages
-    # Run3:
-    cat run3.txt | python $name &> run3.messages
+    # Run1: lose on purpose so can check if Bot wins 
+    echo "" > run1.messages # clear from previous run
+    for cnt in {1..5}; do 
+      while read line; do # statistically should take 10 tries
+                          #  but we add more just to be safe...
+        echo "$line" | python $name &>> run1.messages
+        grep "Bot" run1.messages | grep "WON" > run1.out
+        if [ -s run1.out ]; then
+          break # Ok, found that Bot WON
+        fi
+      done < run1.txt
+      if [ -s run1.out ]; then
+        break # Ok, found that Bot WON, from while
+      fi
+    done
+    #----------------------------------
+    # Run2: let's try to win! Brute force it
+    echo "" > run2.messages # clear from previous run
+    for cnt in {1..5}; do
+      while read line; do # on worse case, should take 7 tries
+        echo "$line" | python $name &>> run2.messages
+        grep "Player" run2.messages | grep "WON" > run2.out
+        if [ -s run2.out ]; then
+          break # Ok, found that Player WON
+        fi
+      done < run2.txt
+      if [ -s run2.out ]; then
+        break # Ok, found that Player WON, from while
+      fi
+    done
+    #----------------------------------
+    # Run3: let's make sure game logic works out
+    echo "" > run3.messages # clear from previous run
+    for cnt in {1..5}; do
+      while read line; do
+        echo "$line" | python $name &>> run3.messages
+        grep -c "Bot: My turn..." run3.messages | grep "2" > run3.out
+        if [ -s run3.out ]; then
+          break # Ok, found at least two rounds...
+        fi
+      done < run1.txt # use run1's input so don't win
+      if [ -s run3.out ]; then
+        break # Ok, found at least two rounds, from while
+      fi
+    done
     ###################################
     #trap '-'
     grep -l "Traceback" run1.messages > err.messages
@@ -83,27 +120,23 @@ if [ -s py.files ]; then        # Only if py file exists
     echo "----------------------------------" >> $REPORT
     #
 
-    # check run1 output
-    grep -l "Wow, the temperature is so hot!" run1.messages > run.out
-    if [ ! -s run.out ]; then
-      echo "Run1's output is not correct (-10 pts)" >> $REPORT
-      ((GRADE = GRADE - 10))
+    # check run1 output: "Bot WON"
+    if [ ! -s run1.out]; then
+      echo "Didn't handle Bot winning correctly (-15 pts)" >> $REPORT
+      ((GRADE = GRADE - 15))
     fi
-    # check run2 output
-    grep -l "Wow, your height is larger than the temperature!" run2.messages > run.out
-    if [ ! -s run.out ]; then
-      echo "Run2's output is not correct (-10 pts)" >> $REPORT
-      ((GRADE = GRADE - 10))
+    # check run2 output: "Player WON"
+    if [ ! -s run2.out ]; then
+      echo "Didn't handle Player winning correctly (-15 pts)" >> $REPORT
+      ((GRADE = GRADE - 15))
     fi
-    # check run3 output
-    grep -l "Interesting... should only happen if height is zero???" run3.messages > run.out
-    if [ ! -s run.out ]; then
-      echo "Run3's output is not correct (-10 pts)" >> $REPORT
-      ((GRADE = GRADE - 10))
+    # check run3 output using run1 input: 
+    #  game logic, i.e. at least two rounds
+    if [ ! -s run3.out ]; then
+      echo "Game logic is not correct (-20 pts)" >> $REPORT
+      ((GRADE = GRADE - 20))
     fi
-    rm run.out
-
-    ### CHECK ABOVE ###
+    rm run*.out
 
     # error messages check
     if [ -s err.messages ]; then
