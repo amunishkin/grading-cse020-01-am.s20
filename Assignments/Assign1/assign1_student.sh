@@ -53,49 +53,35 @@ if [ -s py.files ]; then        # Only if py file exists
      
     #trap '' INT
     ###################################
-    # Run1: lose on purpose so can check if Bot wins 
-    echo "" > run1.messages # clear from previous run
-    for cnt in {1..5}; do 
-      while read line; do # statistically should take 10 tries
+    # Run1: lose on purpose so can check if Bot wins
+    for cnt in {1..5}; do # statistically should take 10 tries
                           #  but we add more just to be safe...
-        echo "$line" | python $name &>> run1.messages
-        grep "Bot" run1.messages | grep "WON" > run1.out
-        if [ -s run1.out ]; then
-          break # Ok, found that Bot WON
-        fi
-      done < run1.txt
+                          #  and do five runs... (50 tries)
+      cat run1.txt | python $name &> run1.messages
+      grep "Bot" run1.messages | grep "WON" > run1.out
       if [ -s run1.out ]; then
-        break # Ok, found that Bot WON, from while
+        break # Ok, found that Bot WON
       fi
     done
     #----------------------------------
     # Run2: let's try to win! Brute force it
-    echo "" > run2.messages # clear from previous run
-    for cnt in {1..5}; do
-      while read line; do # on worse case, should take 7 tries
-        echo "$line" | python $name &>> run2.messages
-        grep "Player" run2.messages | grep "WON" > run2.out
-        if [ -s run2.out ]; then
-          break # Ok, found that Player WON
-        fi
-      done < run2.txt
+    for cnt in {1..10}; do # on worse case, should take 7 tries
+                           #  statistically only one of 10, Bot wins
+      cat run2.txt | python $name &> run2.messages
+      grep "Player" run2.messages | grep "WON" > run2.out
       if [ -s run2.out ]; then
-        break # Ok, found that Player WON, from while
+        break # Ok, found that Player WON
       fi
     done
     #----------------------------------
     # Run3: let's make sure game logic works out
-    echo "" > run3.messages # clear from previous run
     for cnt in {1..5}; do
-      while read line; do
-        echo "$line" | python $name &>> run3.messages
-        grep -c "Bot: My turn..." run3.messages | grep "2" > run3.out
-        if [ -s run3.out ]; then
-          break # Ok, found at least two rounds...
-        fi
-      done < run1.txt # use run1's input so don't win
-      if [ -s run3.out ]; then
-        break # Ok, found at least two rounds, from while
+      cat run1.txt | python $name &> run3.messages
+      ROUNDS=$(grep -c "Bot: My turn..." run3.messages | grep -oE "[0-9]+")
+      if ((ROUNDS > 1)); then
+        echo "At least two rounds!" > run3.out
+        cat run3.out
+        break # Ok, found at least two rounds...
       fi
     done
     ###################################
@@ -121,7 +107,7 @@ if [ -s py.files ]; then        # Only if py file exists
     #
 
     # check run1 output: "Bot WON"
-    if [ ! -s run1.out]; then
+    if [ ! -s run1.out ]; then
       echo "Didn't handle Bot winning correctly (-15 pts)" >> $REPORT
       ((GRADE = GRADE - 15))
     fi
