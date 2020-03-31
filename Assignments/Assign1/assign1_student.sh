@@ -86,9 +86,9 @@ if [ -s py.files ]; then        # Only if py file exists
     done
     ###################################
     #trap '-'
-    grep -l "Traceback" run1.messages > err.messages
-    grep -l "Traceback" run2.messages >> err.messages
-    grep -l "Traceback" run3.messages >> err.messages
+    grep "[Ee]rror" run1.messages | grep -v "EOFError" > err.messages
+    grep "[Ee]rror" run2.messages | grep -v "EOFError" >> err.messages
+    grep "[Ee]rror" run3.messages | grep -v "EOFError" >> err.messages
       
     # print code run
     echo "---------- python run1 -----------" >> $REPORT
