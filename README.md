@@ -7,8 +7,8 @@ Run the following code first:
 
 where you replace ScriptFile.sh with the grading script you want to test
 
-## Video: Running student version of grading script (no extra text files)
+## Video: Running student version (Windows only)
 [![Watch the video](https://img.youtube.com/vi/DsN-AJi7cds/hqdefault.jpg)](https://youtu.be/DsN-AJi7cds)
 
-## Video: Running student version via terminal
+## Video: Running student version via terminal (Windows / Mac / Linux)
 [![Watch the video](https://img.youtube.com/vi/s7BJl3NeoUs/hqdefault.jpg)](https://youtu.be/s7BJl3NeoUs)
