@@ -1,21 +1,21 @@
 #!/bin/bash
-# lab02.sh - grades lab2 performance and specification
+# lab03.sh - grades lab3 performance and specification
 #
 # cse20-01 (Beginning Programming in Python) - Spring 2020
 #
 
 echo ""
-echo " START ... running student's lab2 grading"
+echo " START ... running student's lab3 grading"
 echo ""
 #################################################
 
-SOURCES="Yes_or_No.py"
+SOURCES="CountingBeans.py"
 
 GRADE=100       # keeps track of current grade
 GRADE_MAX=100   # static variable - don't update
 REPORT=grade.txt  # where grade logs are stored
 echo "=========================" > $REPORT
-echo "|| Grade Book for lab2 ||" >> $REPORT
+echo "|| Grade Book for lab3 ||" >> $REPORT
 echo "=========================" >> $REPORT
 
 
@@ -54,13 +54,13 @@ if [ -s py.files ]; then        # Only if py file exists
     #trap '' INT
     ###################################
     # Run1:
-    cat run1.txt | python3 $name &> run1.messages
+    echo "half" | python3 $name &> run1.messages
     # Run2:
-    cat run2.txt | python3 $name &> run2.messages
+    echo "quart" | python3 $name &> run2.messages
     # Run3:
-    cat run3.txt | python3 $name &> run3.messages
+    echo "pint" | python3 $name &> run3.messages
     # Run4:
-    cat run4.txt | python3 $name &> run4.messages
+    echo "cup" | python3 $name &> run4.messages
     ###################################
     #trap '-'
     grep -l "Traceback" run1.messages > err.messages
@@ -89,25 +89,25 @@ if [ -s py.files ]; then        # Only if py file exists
     #
 
     # check run1 output
-    grep -l "Wow, the temperature is so hot!" run1.messages > run.out
+    grep -l "1765" run1.messages > run.out
     if [ ! -s run.out ]; then
       echo "Run1's output is not correct (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
     fi
     # check run2 output
-    grep -l "Wow, your height is larger than the temperature!" run2.messages > run.out
+    grep -l "883" run2.messages > run.out
     if [ ! -s run.out ]; then
       echo "Run2's output is not correct (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
     fi
     # check run3 output
-    grep -l "Interesting... should only happen if height is zero???" run3.messages > run.out
+    grep -l "442" run3.messages > run.out
     if [ ! -s run.out ]; then
       echo "Run3's output is not correct (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
     fi
     # check run4 output
-    grep -l "Oh no, our math is wrong :(" run4.messages > run.out
+    grep -l "221" run4.messages > run.out
     if [ ! -s run.out ]; then
       echo "Run4's output is not correct (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
@@ -144,6 +144,6 @@ echo "" >> $REPORT
 
 #################################################
 echo ""
-echo " FINISH ... running student's lab2 grading"
+echo " FINISH ... running student's lab3 grading"
 echo ""
 
