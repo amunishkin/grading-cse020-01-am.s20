@@ -70,19 +70,19 @@ if [ -s py.files ]; then        # Only if py file exists
       
     # print code run
     echo "---------- python run1 -----------" >> $REPORT
-    echo "python $basename" >> $REPORT
+    echo "python3 $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run1.messages >> $REPORT
     echo "---------- python run2 -----------" >> $REPORT
-    echo "python $basename" >> $REPORT
+    echo "python3 $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run2.messages >> $REPORT
     echo "---------- python run3 -----------" >> $REPORT
-    echo "python $basename" >> $REPORT
+    echo "python3 $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run3.messages >> $REPORT
     echo "---------- python run4 -----------" >> $REPORT
-    echo "python $basename" >> $REPORT
+    echo "python3 $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run4.messages >> $REPORT
     echo "----------------------------------" >> $REPORT
