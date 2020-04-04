@@ -82,7 +82,7 @@ if [ -s py.files ]; then        # Only if py file exists
     #echo "" >> $REPORT
     grep -n "" run3.messages >> $REPORT
     echo "---------- python run4 -----------" >> $REPORT
-    echo "python $basename" >> $REPORT
+    echo "python3 $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run4.messages >> $REPORT
     echo "----------------------------------" >> $REPORT
