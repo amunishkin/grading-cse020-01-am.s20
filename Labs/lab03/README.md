@@ -14,7 +14,7 @@
 ## How to run student group tester and logger (lab03.sh)
 
 
-* Make sure to move both "lab032.sh" and "lab03_student.sh" in same 
+* Make sure to move both "lab03.sh" and "lab03_student.sh" in same 
     directory as where all student directories are located.
 * Run by clicking on lab03.sh or open a terminal and type
     "sh lab03.sh"
