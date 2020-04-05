@@ -39,7 +39,7 @@ echo "" >> $REPORT
 # checks that program runs ----------------------
 #
 # find *.py filenames : extra check
-ls * | grep ".[.]py" > py.files 
+ls . | grep ".[.]py" > py.files 
 cat py.files
 if [ -s py.files ]; then        # Only if py file exists
   while read line; do
