@@ -12,6 +12,12 @@ Download and run dos2unix command first:
 where you replace ScriptFile.sh with the grading script you want to test.
 Seem to work well for the time being.
 
+## Python 2 verse Python 3
+* If you have just python 3 installed, check it by running
+`python --version`
+if it is just prints python 3.X.X then use regular script.
+Otherwise try running the one with extension `_py3`
+
 ## Video: Running student version (Windows only)
 [![Watch the video](https://img.youtube.com/vi/DsN-AJi7cds/hqdefault.jpg)](https://youtu.be/DsN-AJi7cds)
 
