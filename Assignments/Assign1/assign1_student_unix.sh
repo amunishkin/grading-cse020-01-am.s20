@@ -58,7 +58,7 @@ if [ -s py.files ]; then        # Only if py file exists
                           #  but we add more just to be safe...
                           #  and do five runs... (50 tries)
       cat run1.txt | python $name &> run1.messages
-      grep "Bot" run1.messages | grep "WON" > run1.out
+      grep -v "Player" run1.messages | grep "WON" > run1.out
       if [ -s run1.out ]; then
         break # Ok, found that Bot WON
       fi
@@ -77,7 +77,7 @@ if [ -s py.files ]; then        # Only if py file exists
     # Run3: let's make sure game logic works out
     for cnt in {1..5}; do
       cat run1.txt | python $name &> run3.messages
-      ROUNDS=$(grep -c "Bot: My turn..." run3.messages | grep -oE --color=never "[0-9]+")
+      ROUNDS=$(grep -c "Bot: My turn..." run3.messages | grep --color=never -oE "[0-9]+")
       if ((ROUNDS > 1)); then
         echo "At least two rounds!" > run3.out
         cat run3.out
