@@ -5,6 +5,9 @@ Grading scripts for CSE-20-01 Beginning Programming in Python Spring 2020
 Run the following code first:
 * sed -i 's/\r//g' ScriptFile.sh
 
+where you replace ScriptFile.sh with the grading script you want to test.
+Seem to work well for the time being.
+
 ## For Mac users 
 Download and run dos2unix command first:
 * dos2unix ScriptFile.sh ScriptFile_unix.sh
