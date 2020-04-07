@@ -54,9 +54,9 @@ if [ -s py.files ]; then        # Only if py file exists
     #trap '' INT
     ###################################
     # Run1: lose on purpose so can check if Bot wins
-    for cnt in {1..5}; do # statistically should take 10 tries
-                          #  but we add more just to be safe...
-                          #  and do five runs... (50 tries)
+    for cnt in {1..10}; do # statistically should take 10 tries
+                           #  but we add more just to be safe...
+                           #  and do ten runs... (150 tries)
       cat run1.txt | python3 $name &> run1.messages
       grep -v "Player" run1.messages | grep "WON" > run1.out
       if [ -s run1.out ]; then
@@ -65,7 +65,7 @@ if [ -s py.files ]; then        # Only if py file exists
     done
     #----------------------------------
     # Run2: let's try to win! Brute force it
-    for cnt in {1..10}; do # on worse case, should take 7 tries
+    for cnt in {1..20}; do # on worse case, should take 7 tries
                            #  statistically only one of 10, Bot wins
       cat run2.txt | python3 $name &> run2.messages
       grep "Player" run2.messages | grep "WON" > run2.out
@@ -75,7 +75,7 @@ if [ -s py.files ]; then        # Only if py file exists
     done
     #----------------------------------
     # Run3: let's make sure game logic works out
-    for cnt in {1..5}; do
+    for cnt in {1..10}; do
       cat run1.txt | python3 $name &> run3.messages
       ROUNDS=$(grep -c "Bot: My turn..." run3.messages | grep -oE "[0-9]+")
       if ((ROUNDS > 1)); then
