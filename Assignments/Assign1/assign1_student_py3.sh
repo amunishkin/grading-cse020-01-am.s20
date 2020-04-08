@@ -54,36 +54,34 @@ if [ -s py.files ]; then        # Only if py file exists
     #trap '' INT
     ###################################
     # Run1: lose on purpose so can check if Bot wins
-    for cnt in {1..10}; do # statistically should take 10 tries
-                           #  but we add more just to be safe...
-                           #  and do ten runs... (150 tries)
+    for cnt in {1..100}; do # statistically should take 10 tries
+                            #  but we add more just to be safe...
       cat run1.txt | python3 $name &> run1.messages
       grep -v "Player" run1.messages | grep "WON" > run1.out
       if [ -s run1.out ]; then
+        echo "Bot won at $cnt"
         break # Ok, found that Bot WON
       fi
     done
     #----------------------------------
     # Run2: let's try to win! Brute force it
-    for cnt in {1..20}; do # on worse case, should take 7 tries
-                           #  statistically only one of 10, Bot wins
+    for cnt in {1..500}; do # on worse case, should take 7 tries
+                            #  statistically only one of 10, Bot wins
       cat run2.txt | python3 $name &> run2.messages
       grep "Player" run2.messages | grep "WON" > run2.out
       if [ -s run2.out ]; then
+        echo "Player won at $cnt"
         break # Ok, found that Player WON
       fi
     done
     #----------------------------------
     # Run3: let's make sure game logic works out
-    for cnt in {1..10}; do
-      cat run1.txt | python3 $name &> run3.messages
-      ROUNDS=$(grep -c "Bot: My turn..." run3.messages | grep -oE "[0-9]+")
-      if ((ROUNDS > 1)); then
-        echo "At least two rounds!" > run3.out
-        cat run3.out
-        break # Ok, found at least two rounds...
-      fi
-    done
+    cat run1.txt | python3 $name &> run3.messages
+    ROUNDS=$(grep -c "Bot: My turn..." run3.messages | grep -oE "[0-9]+")
+    if ((ROUNDS > 1)); then
+      echo "At least two rounds!" > run3.out
+      cat run3.out
+    fi
     ###################################
     #trap '-'
     grep "[Ee]rror" run1.messages | grep -v "EOFError" > err.messages
