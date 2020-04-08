@@ -76,12 +76,15 @@ if [ -s py.files ]; then        # Only if py file exists
     done
     #----------------------------------
     # Run3: let's make sure game logic works out
-    cat run1.txt | python3 $name &> run3.messages
-    ROUNDS=$(grep -c "Bot: My turn..." run3.messages | grep -oE "[0-9]+")
-    if ((ROUNDS > 1)); then
-      echo "At least two rounds!" > run3.out
-      cat run3.out
-    fi
+    for cnt in {1..100}; do
+      cat run1.txt | python3 $name &> run3.messages
+      ROUNDS=$(grep -c "Bot: My turn..." run3.messages | grep -oE "[0-9]+")
+      if ((ROUNDS > 1)); then
+        echo "At least two rounds! Took $cnt" > run3.out
+        cat run3.out
+        break # Ok, found at least two rounds
+      fi
+    done
     ###################################
     #trap '-'
     grep "[Ee]rror" run1.messages | grep -v "EOFError" > err.messages
