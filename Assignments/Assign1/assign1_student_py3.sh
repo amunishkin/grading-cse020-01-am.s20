@@ -54,16 +54,14 @@ if [ -s py.files ]; then        # Only if py file exists
     #trap '' INT
     MAX_CNT=500
     ###################################
-    # Run1: lose on purpose so can check if Bot wins
-    for cnt in {1..$MAX_CNT}; do # statistically should take 10 tries
-                            #  but we add more just to be safe...
+    # Run1: lose on purpose so can check if Bot wins  
+    for ((cnt=1; cnt<=MAX_CNT; cnt++)); do # statistically should take 10 tries
+                                          #  but we add more just to be safe...
       cat run1.txt | python3 $name &> run1.messages
       grep -v "Player" run1.messages | grep "WON" > run1.out
       if [ -s run1.out ]; then
         echo "Bot won at $cnt"
         break # Ok, found that Bot WON
-      else
-        echo "Run1 cnt=$cnt / $MAX_CNT"
       fi
       if ((cnt == MAX_CNT)); then
         echo "Please rerun -- test not accurate"
@@ -71,15 +69,13 @@ if [ -s py.files ]; then        # Only if py file exists
     done
     #----------------------------------
     # Run2: let's try to win! Brute force it
-    for cnt in {1..$MAX_CNT}; do # on worse case, should take 7 tries
-                            #  statistically only one of 10, Bot wins
+    for ((cnt=1; cnt<=MAX_CNT; cnt++)); do # on worse case, should take 7 tries
+                                          #  statistically only one of 10, Bot wins
       cat run2.txt | python3 $name &> run2.messages
       grep "Player" run2.messages | grep "WON" > run2.out
       if [ -s run2.out ]; then
         echo "Player won at $cnt"
         break # Ok, found that Player WON
-      else
-        echo "Run2 cnt=$cnt / $MAX_CNT"
       fi
       if ((cnt == MAX_CNT)); then
         echo "Please rerun -- test not accurate"
@@ -87,15 +83,13 @@ if [ -s py.files ]; then        # Only if py file exists
     done
     #----------------------------------
     # Run3: let's make sure game logic works out
-    for cnt in {1..$MAX_CNT}; do
+    for ((cnt=1; cnt<=MAX_CNT; cnt++)); do
       cat run1.txt | python3 $name &> run3.messages
       ROUNDS=$(grep -c "Bot: My turn..." run3.messages | grep -oE "[0-9]+")
       if ((ROUNDS > 1)); then
         echo "At least two rounds! Took $cnt" > run3.out
         cat run3.out
         break # Ok, found at least two rounds
-      else
-        echo "Run3 cnt=$cnt / $MAX_CNT"
       fi
       if ((cnt == MAX_CNT)); then
         echo "Please rerun -- test not accurate"
