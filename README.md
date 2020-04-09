@@ -26,3 +26,10 @@ Otherwise try running the one with extension `_py3`
 
 ## Video: Running student version via terminal (Windows / Mac / Linux)
 [![Watch the video](https://img.youtube.com/vi/s7BJl3NeoUs/hqdefault.jpg)](https://youtu.be/s7BJl3NeoUs)
+
+# From cspatrick/cse20 repo: https://github.com/cspatrick/cse20
+CSE20
+
+Unzip all student submissions into one directory and edit rename_folders.py with directory path
+
+Run rename_folders.py in same directory 
