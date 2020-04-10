@@ -68,7 +68,7 @@ if [ -s py.files ]; then        # Only if py file exists
 
     # error messages check
     if [ -s err.messages ]; then
-      echo "Your program has errors (-75 pts)" >> $REPORT
+      echo "Your program has errors (-50 pts)" >> $REPORT
       ((GRADE = GRADE - 50))
     elif [ ! -s messages ]; then
       echo "Your program has no output (-25 pts)" >> $REPORT
