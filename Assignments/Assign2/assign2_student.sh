@@ -5,7 +5,7 @@
 #
 
 echo ""
-echo " START ... running student's assignment1 grading"
+echo " START ... running student's assignment2 grading"
 echo ""
 #################################################
 
@@ -15,7 +15,7 @@ GRADE=100       # keeps track of current grade
 GRADE_MAX=100   # static variable - don't update
 REPORT=grade.txt  # where grade logs are stored
 echo "============================" > $REPORT
-echo "|| Grade Book for assign1 ||" >> $REPORT
+echo "|| Grade Book for assign2 ||" >> $REPORT
 echo "============================" >> $REPORT
 
 
@@ -165,6 +165,6 @@ echo "" >> $REPORT
 
 #################################################
 echo ""
-echo " FINISH ... running student's assignment1 grading"
+echo " FINISH ... running student's assignment2 grading"
 echo ""
 
