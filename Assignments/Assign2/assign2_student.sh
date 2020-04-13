@@ -6,6 +6,8 @@
 
 # helper functions -----------------------------
 find_fib_square() { # $1==header/end ; $2==body ; $3==file_in ; $4==file_out
+  echo $3 $4
+  
   if (($1 == 1)); then
     grep -c "[*]" $3 | grep "1" > $4
   else
@@ -20,7 +22,7 @@ calc_fib_num() { # $1==fib_num to calc
   F2=1 # 2nd
   F3=1 # 3rd
   for ((cnt=2; cnt<$1; cnt++)); do
-    F3=$( $F1 + $F2 )
+    ((F3 = $F1 + $F2))
     F1=$F2
     F2=$F3
   done
@@ -33,7 +35,7 @@ echo " START ... running student's assignment2 grading"
 echo ""
 #################################################
 
-SOURCES="MyNameAndYours.py"
+SOURCES="FibonacciNumbers.py"
 
 GRADE=100       # keeps track of current grade
 GRADE_MAX=100   # static variable - don't update
@@ -76,34 +78,35 @@ if [ -s py.files ]; then        # Only if py file exists
     rm base.name
      
     #trap '' INT
-    MAX_CNT=500
     ###################################
     # Run1: check drawing 1st Fibonacci Square  
-    echo {"1";"NO";} | python $name &> run1.messages
+    cat run1.txt | python $name &> run1.messages
     find_fib_square 1 0 run1.messages run1.out
     if [ ! -s run1.out ]; then
       echo "Good, no drawing for 1st Fibonacci Square"
     fi
     #----------------------------------
     # Run2: check drawing 4th Fibonacci Square
-    echo {"4";"NO";} | python $name &> run2.messages
+    cat run2.txt | python $name &> run2.messages
     find_fib_square 2 0 run2.messages run2.out
     if [ -s run2.out ]; then
       echo "Ok, drawing here for 4th Fibonacci Squre"
     fi
     #----------------------------------
     # Run3: check drawing 10th Fibonacci Square
-    echo {"10";"NO";} | python $name &> run3.messages
+    cat run3.txt | python $name &> run3.messages
     find_fib_square 34 32 run3.messages run3.out
     if [ -s run3.out ]; then
       echo "Ok, drawing here for 10th Fibonacci Square"
     fi
     #----------------------------------
     # Run4: check drawing 10th Fibonacci Square and all below
-    echo {"10";"YES";} | python $name &> run4.messages
+    cat run4.txt | python $name &> run4.messages
     for ((fib_num=10; fib_num>0; fib_num--)); do
-      val1=$( calc_fib_num $fib_num )
+      calc_fib_num $fib_num
+      val1=$? # return value from calc_fib_num() above
       val2=$(( $val1 - 2 ))
+      touch run4.out # make tmp file for redirect below
       find_fib_square $val1 $val2 run4.messages run4.out
       if [ ! -s run4.out ] && (( fib_num>1 )); then
         echo "Didn't draw $fib_num th Fibonacci Square (-5 pts)" >> $REPORT
