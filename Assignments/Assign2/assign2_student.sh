@@ -6,8 +6,6 @@
 
 # helper functions -----------------------------
 find_fib_square() { # $1==header/end ; $2==body ; $3==file_in ; $4==file_out
-  echo $3 $4
-  
   if (($1 == 1)); then
     grep -c "[*]" $3 | grep "1" > $4
   else
@@ -17,6 +15,7 @@ find_fib_square() { # $1==header/end ; $2==body ; $3==file_in ; $4==file_out
     fi
   fi 
 }
+
 calc_fib_num() { # $1==fib_num to calc
   F1=0 # 1st
   F2=1 # 2nd

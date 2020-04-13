@@ -4,12 +4,37 @@
 # cse20-01 (Beginning Programming in Python) - Spring 2020
 #
 
+# helper functions -----------------------------
+find_fib_square() { # $1==header/end ; $2==body ; $3==file_in ; $4==file_out
+  if (($1 == 1)); then
+    grep -c "[*]" $3 | grep "1" > $4
+  else
+    grep -c "[*]{$1}" $3 | grep "2" > $4
+    if [ -s $4 ] && (($2 > 0)); then
+      grep -c "[*][:space:]{$2}[*]" $3 | grep "$2" > $4
+    fi
+  fi 
+}
+
+calc_fib_num() { # $1==fib_num to calc
+  F1=0 # 1st
+  F2=1 # 2nd
+  F3=1 # 3rd
+  for ((cnt=2; cnt<$1; cnt++)); do
+    ((F3 = $F1 + $F2))
+    F1=$F2
+    F2=$F3
+  done
+  return $F3
+}
+#-----------------------------------------------
+
 echo ""
 echo " START ... running student's assignment2 grading"
 echo ""
 #################################################
 
-SOURCES="MyNameAndYours.py"
+SOURCES="FibonacciNumbers.py"
 
 GRADE=100       # keeps track of current grade
 GRADE_MAX=100   # static variable - don't update
@@ -25,8 +50,8 @@ echo "" >> $REPORT
 #
 for FILE in $SOURCES; do
   if [ ! -e "$FILE" ]; then
-    echo "$FILE absent (-25 pts)" >> $REPORT
-    ((GRADE = GRADE - 25))
+    echo "$FILE absent (-15 pts)" >> $REPORT
+    ((GRADE = GRADE - 15))
   fi
 done
 if ((GRADE == GRADE_MAX)); then
@@ -52,47 +77,41 @@ if [ -s py.files ]; then        # Only if py file exists
     rm base.name
      
     #trap '' INT
-    MAX_CNT=500
     ###################################
-    # Run1: lose on purpose so can check if Bot wins  
-    for ((cnt=1; cnt<=MAX_CNT; cnt++)); do # statistically should take 10 tries
-                                          #  but we add more just to be safe...
-      cat run1.txt | python3 $name &> run1.messages
-      grep -v "Player" run1.messages | grep "WON" > run1.out
-      if [ -s run1.out ]; then
-        echo "Bot won at $cnt"
-        break # Ok, found that Bot WON
-      fi
-      if ((cnt == MAX_CNT)); then
-        echo "Please rerun -- test not accurate"
-      fi
-    done
+    # Run1: check drawing 1st Fibonacci Square  
+    cat run1.txt | python3 $name &> run1.messages
+    find_fib_square 1 0 run1.messages run1.out
+    if [ ! -s run1.out ]; then
+      echo "Good, no drawing for 1st Fibonacci Square"
+    fi
     #----------------------------------
-    # Run2: let's try to win! Brute force it
-    for ((cnt=1; cnt<=MAX_CNT; cnt++)); do # on worse case, should take 7 tries
-                                          #  statistically only one of 10, Bot wins
-      cat run2.txt | python3 $name &> run2.messages
-      grep "Player" run2.messages | grep "WON" > run2.out
-      if [ -s run2.out ]; then
-        echo "Player won at $cnt"
-        break # Ok, found that Player WON
-      fi
-      if ((cnt == MAX_CNT)); then
-        echo "Please rerun -- test not accurate"
-      fi
-    done
+    # Run2: check drawing 4th Fibonacci Square
+    cat run2.txt | python3 $name &> run2.messages
+    find_fib_square 2 0 run2.messages run2.out
+    if [ -s run2.out ]; then
+      echo "Ok, drawing here for 4th Fibonacci Squre"
+    fi
     #----------------------------------
-    # Run3: let's make sure game logic works out
-    for ((cnt=1; cnt<=MAX_CNT; cnt++)); do
-      cat run1.txt | python3 $name &> run3.messages
-      ROUNDS=$(grep -c "Bot: My turn..." run3.messages | grep -oE "[0-9]+")
-      if ((ROUNDS > 1)); then
-        echo "At least two rounds! Took $cnt" > run3.out
-        cat run3.out
-        break # Ok, found at least two rounds
-      fi
-      if ((cnt == MAX_CNT)); then
-        echo "Please rerun -- test not accurate"
+    # Run3: check drawing 10th Fibonacci Square
+    cat run3.txt | python3 $name &> run3.messages
+    find_fib_square 34 32 run3.messages run3.out
+    if [ -s run3.out ]; then
+      echo "Ok, drawing here for 10th Fibonacci Square"
+    fi
+    #----------------------------------
+    # Run4: check drawing 10th Fibonacci Square and all below
+    cat run4.txt | python3 $name &> run4.messages
+    for ((fib_num=10; fib_num>0; fib_num--)); do
+      calc_fib_num $fib_num
+      val1=$? # return value from calc_fib_num() above
+      val2=$(( $val1 - 2 ))
+      echo $val1 $val2
+      touch run4.out # make tmp file for redirect below
+      find_fib_square $val1 $val2 run4.messages run4.out
+      if [ ! -s run4.out ] && (( fib_num>1 )); then
+        echo "Didn't draw $fib_num th Fibonacci Square (-5 pts)" >> $REPORT
+        ((GRADE = GRADE - 5))
+        break # found Fib. Square that wasn't drawn
       fi
     done
     ###################################
@@ -100,6 +119,7 @@ if [ -s py.files ]; then        # Only if py file exists
     grep "[Ee]rror" run1.messages | grep -v "EOFError" > err.messages
     grep "[Ee]rror" run2.messages | grep -v "EOFError" >> err.messages
     grep "[Ee]rror" run3.messages | grep -v "EOFError" >> err.messages
+    grep "[Ee]rror" run4.messages | grep -v "EOFError" >> err.messages
       
     # print code run
     echo "---------- python run1 -----------" >> $REPORT
@@ -114,23 +134,26 @@ if [ -s py.files ]; then        # Only if py file exists
     echo "python3 $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run3.messages >> $REPORT
+    echo "---------- python run4 -----------" >> $REPORT
+    echo "python3 $basename" >> $REPORT
+    #echo "" >> $REPORT
+    grep -n "" run4.messages >> $REPORT
     echo "----------------------------------" >> $REPORT
     #
 
-    # check run1 output: "Bot WON"
-    if [ ! -s run1.out ]; then
-      echo "Didn't handle Bot winning correctly (-15 pts)" >> $REPORT
-      ((GRADE = GRADE - 15))
+    # check run1 output: 1st Fib. Square
+    if [ -s run1.out ]; then
+      echo "Drew a Fibonacci Square for 1st (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
     fi
-    # check run2 output: "Player WON"
+    # check run2 output: 4th Fib. Square
     if [ ! -s run2.out ]; then
-      echo "Didn't handle Player winning correctly (-15 pts)" >> $REPORT
-      ((GRADE = GRADE - 15))
+      echo "Incorrect Fibonacci Square for 4th (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
     fi
-    # check run3 output using run1 input: 
-    #  game logic, i.e. at least two rounds
+    # check run3 output: 10th Fib. Square
     if [ ! -s run3.out ]; then
-      echo "Game logic is not correct (-20 pts)" >> $REPORT
+      echo "Incorrect Fibonacci Square for 10th (-20 pts)" >> $REPORT
       ((GRADE = GRADE - 20))
     fi
     rm run*.out
