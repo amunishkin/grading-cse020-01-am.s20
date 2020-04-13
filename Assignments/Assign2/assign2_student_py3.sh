@@ -7,13 +7,13 @@
 # helper functions -----------------------------
 find_fib_square() { # $1==header/end ; $2==body ; $3==file_in ; $4==file_out
   if (($1 == 1)); then
-    grep -c "[*]" $3 | grep "1" > $4
+    grep -Ec "[*]" $3 | grep "1" > $4
   else
-    grep -c "[*]{$1}" $3 | grep "2" > $4
+    grep -Ec "[*]{$1}" $3  | grep "2" > $4
     if [ -s $4 ] && (($2 > 0)); then
-      grep -c "[*][:space:]{$2}[*]" $3 | grep "$2" > $4
+      grep -Ec "[*][[:space:]]{$2}[*]" $3 | grep "$2" > $4
     fi
-  fi 
+  fi
 }
 
 calc_fib_num() { # $1==fib_num to calc
@@ -106,7 +106,6 @@ if [ -s py.files ]; then        # Only if py file exists
       val1=$? # return value from calc_fib_num() above
       val2=$(( $val1 - 2 ))
       echo $val1 $val2
-      touch run4.out # make tmp file for redirect below
       find_fib_square $val1 $val2 run4.messages run4.out
       if [ ! -s run4.out ] && (( fib_num>1 )); then
         echo "Didn't draw $fib_num th Fibonacci Square (-5 pts)" >> $REPORT
@@ -121,6 +120,7 @@ if [ -s py.files ]; then        # Only if py file exists
     grep "[Ee]rror" run3.messages | grep -v "EOFError" >> err.messages
     grep "[Ee]rror" run4.messages | grep -v "EOFError" >> err.messages
       
+    echo "" >> $REPORT
     # print code run
     echo "---------- python run1 -----------" >> $REPORT
     echo "python3 $basename" >> $REPORT
