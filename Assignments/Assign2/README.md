@@ -5,6 +5,7 @@
 
 
 * Go to your directory where your Python file is located
+* * Move the assign1_student.sh and four txt run{1,2,3,4} files there
 * Run by clicking on assign2_student.sh or open a terminal and type 
     "sh assign2_student.sh"
 * Creates a txt file with your grade and some comments
@@ -15,6 +16,7 @@
 
 * Make sure to move both "assign2.sh" and "assign2_student.sh" in 
     same directory as where all student directories are located.
+    Also move four txt run{1,2,3,4} files here too.
 * Run by clicking on assign2.sh or open a terminal and type
     "sh assign2.sh"
 * Runs assign2_student for each student directory
