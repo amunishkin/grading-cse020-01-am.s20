@@ -95,7 +95,7 @@ if [ -s py.files ]; then        # Only if py file exists
     cat run2.txt | python3 $name &> run2.messages
     find_fib_square 2 0 run2.messages run2.out
     if [ -s run2.out ]; then
-      echo "Good, drawing here for 4th Fibonacci Squre"
+      echo "Good, drawing here for 4th Fibonacci Square"
     fi
     #----------------------------------
     # Run3: check drawing 10th Fibonacci Square
@@ -111,12 +111,13 @@ if [ -s py.files ]; then        # Only if py file exists
       calc_fib_num $fib_num
       val1=$? # return value from calc_fib_num() above
       val2=$(( $val1 - 2 ))
-      echo $val1 $val2
       find_fib_square $val1 $val2 run4.messages run4.out
       if [ ! -s run4.out ] && (( fib_num>1 )); then
         echo "Didn't draw $fib_num th Fibonacci Square (-5 pts)" >> $REPORT
         ((GRADE = GRADE - 5))
         break # found Fib. Square that wasn't drawn
+      else
+        echo "$fib_num works out..."
       fi
     done
     ###################################
