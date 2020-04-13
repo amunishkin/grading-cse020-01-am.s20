@@ -5,7 +5,7 @@
 #
 
 echo ""
-echo " START ALL ... students' assignment1 grading"
+echo " START ALL ... students' assignment2 grading"
 echo ""
 #################################################
 
@@ -20,10 +20,12 @@ for i in $(ls .); do
   if [ -d "$i" ]; then
     echo "Inside $i ..." 
     cp assign2_student.sh $i  # copy individual script
+    cp run*.txt $i            # copy two test files
     cd $i
     #
     sh assign2_student.sh
     rm assign2_student.sh     # now remove them
+    rm run*.txt
     #
     cd ..
     GRADE=$(grep "GRADE" $i/grade.txt | grep -oE "[0-9]+")
@@ -33,6 +35,6 @@ done
 
 #################################################
 echo ""
-echo " FINISH ALL ... students' assignment1 grading"
+echo " FINISH ALL ... students' assignment2 grading"
 echo ""
 
