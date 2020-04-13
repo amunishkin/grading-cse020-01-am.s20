@@ -105,6 +105,11 @@ if [ -s py.files ]; then        # Only if py file exists
       val1=$( calc_fib_num $fib_num )
       val2=$(( $val1 - 2 ))
       find_fib_square $val1 $val2 run4.messages run4.out
+      if [ ! -s run4.out ] && (( fib_num>1 )); then
+        echo "Didn't draw $fib_num th Fibonacci Square (-5 pts)" >> $REPORT
+        ((GRADE = GRADE - 5))
+        break # found Fib. Square that wasn't drawn
+      fi
     done
     ###################################
     #trap '-'
@@ -140,13 +145,12 @@ if [ -s py.files ]; then        # Only if py file exists
     fi
     # check run2 output: 4th Fib. Square
     if [ ! -s run2.out ]; then
-      echo "Didn't handle Player winning correctly (-15 pts)" >> $REPORT
-      ((GRADE = GRADE - 15))
+      echo "Incorrect Fibonacci Square for 4th (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
     fi
-    # check run3 output using run1 input: 
-    #  game logic, i.e. at least two rounds
+    # check run3 output: 10th Fib. Square
     if [ ! -s run3.out ]; then
-      echo "Game logic is not correct (-20 pts)" >> $REPORT
+      echo "Incorrect Fibonacci Square for 10th (-20 pts)" >> $REPORT
       ((GRADE = GRADE - 20))
     fi
     rm run*.out
