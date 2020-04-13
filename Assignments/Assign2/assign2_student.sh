@@ -174,8 +174,8 @@ if [ -s py.files ]; then        # Only if py file exists
 
   done < py.files
 else                            # Otherwise no py file
-  echo "There is no Python file that can be tested (-75 pts)" >> $REPORT
-  ((GRADE = GRADE - 75))
+  echo "There is no Python file that can be tested (-85 pts)" >> $REPORT
+  ((GRADE = GRADE - 85))
 fi
 rm py.files
 
