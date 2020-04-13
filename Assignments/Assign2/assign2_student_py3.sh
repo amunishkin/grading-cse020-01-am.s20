@@ -7,9 +7,15 @@
 # helper functions -----------------------------
 find_fib_square() { # $1==header/end ; $2==body ; $3==file_in ; $4==file_out
   if (($1 == 1)); then
-    grep -Ec "[*]" $3 | grep "1" > $4
+    CNT=$( grep -Ec "[*][[:space:]]" $3 )
+    if (( $CNT > 0 )); then
+      echo "1" > $4
+    fi
   else
-    grep -Ec "[*]{$1}" $3  | grep "2" > $4
+    CNT=$( grep -Ec "[*]{$1}[[:space:]]" $3 )
+    if (( $CNT > 1 )); then
+      echo "2" > $4
+    fi
     if [ -s $4 ] && (($2 > 0)); then
       grep -Ec "[*][[:space:]]{$2}[*]" $3 | grep "$2" > $4
     fi
@@ -89,14 +95,14 @@ if [ -s py.files ]; then        # Only if py file exists
     cat run2.txt | python3 $name &> run2.messages
     find_fib_square 2 0 run2.messages run2.out
     if [ -s run2.out ]; then
-      echo "Ok, drawing here for 4th Fibonacci Squre"
+      echo "Good, drawing here for 4th Fibonacci Squre"
     fi
     #----------------------------------
     # Run3: check drawing 10th Fibonacci Square
     cat run3.txt | python3 $name &> run3.messages
     find_fib_square 34 32 run3.messages run3.out
     if [ -s run3.out ]; then
-      echo "Ok, drawing here for 10th Fibonacci Square"
+      echo "Good, drawing here for 10th Fibonacci Square"
     fi
     #----------------------------------
     # Run4: check drawing 10th Fibonacci Square and all below
