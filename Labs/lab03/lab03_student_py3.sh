@@ -99,7 +99,7 @@ if [ -s py.files ]; then        # Only if py file exists
       ((GRADE = GRADE - 10))
     fi
     # check run2 output
-    BEAN_CNT=$(grep -oE "[0-9]+" run1.messages)
+    BEAN_CNT=$(grep -oE "[0-9]+" run2.messages)
     if ((BEAN_CNT > 883)) && ((BEAN_CNT-883 > BEAN_TOL)); then
       echo "Run2's output is larger than $BEAN_TOL beans (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
@@ -108,7 +108,7 @@ if [ -s py.files ]; then        # Only if py file exists
       ((GRADE = GRADE - 10))
     fi
     # check run3 output
-    BEAN_CNT=$(grep -oE "[0-9]+" run1.messages)
+    BEAN_CNT=$(grep -oE "[0-9]+" run3.messages)
     if ((BEAN_CNT > 442)) && ((BEAN_CNT-442 > BEAN_TOL)); then
       echo "Run3's output is larger than $BEAN_TOL beans (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
@@ -117,7 +117,7 @@ if [ -s py.files ]; then        # Only if py file exists
       ((GRADE = GRADE - 10))
     fi
     # check run4 output
-    BEAN_CNT=$(grep -oE "[0-9]+" run1.messages)
+    BEAN_CNT=$(grep -oE "[0-9]+" run4.messages)
     if ((BEAN_CNT > 221)) && ((BEAN_CNT-221 > BEAN_TOL)); then
       echo "Run4's output is larger than $BEAN_TOL beans (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
