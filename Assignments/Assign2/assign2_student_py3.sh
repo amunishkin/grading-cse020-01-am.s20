@@ -7,12 +7,12 @@
 # helper functions -----------------------------
 find_fib_square() { # $1==header/end ; $2==body ; $3==file_in ; $4==file_out
   if (($1 == 1)); then
-    CNT=$( grep -Ec "[*][[:space:]]" $3 )
+    CNT=$( grep -Ec "[*]" $3 )
     if (( $CNT > 0 )); then
       echo "1" > $4
     fi
   else
-    CNT=$( grep -Ec "[*]{$1}[[:space:]]" $3 )
+    CNT=$( grep -Ec "[*]{$1}" $3 )
     if (( $CNT > 1 )); then
       echo "2" > $4
     fi
