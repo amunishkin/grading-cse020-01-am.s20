@@ -88,31 +88,43 @@ if [ -s py.files ]; then        # Only if py file exists
     echo "----------------------------------" >> $REPORT
     #
 
+    BEAN_TOL=3
     # check run1 output
-    grep -l "1765" run1.messages > run.out
-    if [ ! -s run.out ]; then
-      echo "Run1's output is not correct (-10 pts)" >> $REPORT
+    BEAN_CNT=$(grep -oE "[0-9]+" run1.messages)
+    if ((BEAN_CNT > 1765)) && ((BEAN_CNT-1765 > BEAN_TOL)); then
+      echo "Run1's output is larger than $BEAN_TOL beans (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
+    elif ((BEAN_CNT < 1765)) && ((1765-BEAN_CNT > BEAN_TOL)); then
+      echo "Run1's output is smaller than $BEAN_TOL beans (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
     fi
     # check run2 output
-    grep -l "883" run2.messages > run.out
-    if [ ! -s run.out ]; then
-      echo "Run2's output is not correct (-10 pts)" >> $REPORT
+    BEAN_CNT=$(grep -oE "[0-9]+" run1.messages)
+    if ((BEAN_CNT > 883)) && ((BEAN_CNT-883 > BEAN_TOL)); then
+      echo "Run2's output is larger than $BEAN_TOL beans (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
+    elif ((BEAN_CNT < 883)) && ((883-BEAN_CNT > BEAN_TOL)); then
+      echo "Run2's output is smaller than $BEAN_TOL beans (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
     fi
     # check run3 output
-    grep -l "442" run3.messages > run.out
-    if [ ! -s run.out ]; then
-      echo "Run3's output is not correct (-10 pts)" >> $REPORT
+    BEAN_CNT=$(grep -oE "[0-9]+" run1.messages)
+    if ((BEAN_CNT > 442)) && ((BEAN_CNT-442 > BEAN_TOL)); then
+      echo "Run3's output is larger than $BEAN_TOL beans (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
+    elif ((BEAN_CNT < 442)) && ((442-BEAN_CNT > BEAN_TOL)); then
+      echo "Run3's output is smaller than $BEAN_TOL beans (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
     fi
     # check run4 output
-    grep -l "221" run4.messages > run.out
-    if [ ! -s run.out ]; then
-      echo "Run4's output is not correct (-10 pts)" >> $REPORT
+    BEAN_CNT=$(grep -oE "[0-9]+" run1.messages)
+    if ((BEAN_CNT > 221)) && ((BEAN_CNT-221 > BEAN_TOL)); then
+      echo "Run4's output is larger than $BEAN_TOL beans (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
+    elif ((BEAN_CNT < 221)) && ((221-BEAN_CNT > BEAN_TOL)); then
+      echo "Run4's output is smaller than $BEAN_TOL beans (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
     fi
-    rm run.out
 
     # error messages check
     if [ -s err.messages ]; then
