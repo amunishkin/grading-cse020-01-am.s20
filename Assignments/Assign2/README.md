@@ -5,7 +5,7 @@
 
 
 * Go to your directory where your Python file is located
-* * Move the assign1_student.sh and four txt run{1,2,3,4} files there
+* Move the assign1_student.sh and four txt run{1,2,3,4} files there
 * Run by clicking on assign2_student.sh or open a terminal and type 
     "sh assign2_student.sh"
 * Creates a txt file with your grade and some comments
