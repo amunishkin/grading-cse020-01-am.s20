@@ -10,11 +10,12 @@ BEAN_TOL=3
 # helper functions -----------------------------
 find_jar_number() { # $1==jar_type ; $2==num_of_occurances ; $3==file
   STATUS=0
+  #echo "num=$2" # NUM_OCCURANCES should match this...
   #
   case "$1" in
     1)
       BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "cup" | grep -oE "[0-9]+")
-      NUM_OCCURANCES=$(grep -c "$BEAN_CNT")
+      NUM_OCCURANCES=$(grep -c "$BEAN_CNT" $3)
       #
       echo "...cup: beans=$BEAN_CNT, num_of_times=$NUM_OCCURANCES"
       #
@@ -22,13 +23,14 @@ find_jar_number() { # $1==jar_type ; $2==num_of_occurances ; $3==file
         STATUS=1
       elif ((BEAN_CNT < 221)) && ((221-BEAN_CNT > BEAN_TOL)); then
         STATUS=2
-      elif (($NUM_OCCURANCES != $2)); then
+      fi
+      if (($NUM_OCCURANCES != $2)); then
         STATUS=3
       fi
     ;;
     2)
       BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "pint" | grep -oE "[0-9]+")
-      NUM_OCCURANCES=$(grep -c "$BEAN_CNT")
+      NUM_OCCURANCES=$(grep -c "$BEAN_CNT" $3)
       #
       echo "...pint: beans=$BEAN_CNT, num_of_times=$NUM_OCCURANCES"
       #
@@ -36,13 +38,14 @@ find_jar_number() { # $1==jar_type ; $2==num_of_occurances ; $3==file
         STATUS=1
       elif ((BEAN_CNT < 442)) && ((442-BEAN_CNT > BEAN_TOL)); then
         STATUS=2
-      elif (($NUM_OCCURANCES != $2)); then
+      fi
+      if (($NUM_OCCURANCES != $2)); then
         STATUS=3
       fi
     ;;
     3)
       BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "quart" | grep -oE "[0-9]+")
-      NUM_OCCURANCES=$(grep -c "$BEAN_CNT")
+      NUM_OCCURANCES=$(grep -c "$BEAN_CNT" $3)
       #
       echo "...quart: beans=$BEAN_CNT, num_of_times=$NUM_OCCURANCES"
       #
@@ -50,13 +53,14 @@ find_jar_number() { # $1==jar_type ; $2==num_of_occurances ; $3==file
         STATUS=1
       elif ((BEAN_CNT < 883)) && ((883-BEAN_CNT > BEAN_TOL)); then
         STATUS=2
-      elif (($NUM_OCCURANCES != $2)); then
+      fi
+      if (($NUM_OCCURANCES != $2)); then
         STATUS=3
       fi
     ;;
     4)
       BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "half" | grep -oE "[0-9]+")
-      NUM_OCCURANCES=$(grep -c "$BEAN_CNT")
+      NUM_OCCURANCES=$(grep -c "$BEAN_CNT" $3)
       #
       echo "...half: beans=$BEAN_CNT, num_of_times=$NUM_OCCURANCES"
       #
@@ -69,6 +73,7 @@ find_jar_number() { # $1==jar_type ; $2==num_of_occurances ; $3==file
       fi
     ;;
   esac
+  #echo "status=$STATUS" # print resulting error message...
   return $STATUS
 }
 #-----------------------------------------------
@@ -158,25 +163,33 @@ if [ -s py.files ]; then        # Only if py file exists
     #
 
     # check run1 output
+    echo "Run1:"
     grep -oE "[0-9]+" run1.messages > run1.out 
     if [ -s run1.out ]; then
       echo "Run1's output is not correct (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
     fi
     # check run2 output
+    echo "Run2:"
     find_jar_number 4 1 run2.messages
-    if (($? == 1)); then
-      echo "Run2's output is larger than $BEAN_TOL beans (-10 pts)" >> $REPORT
-      ((GRADE = GRADE - 10))
-    elif (($? == 2)); then
-      echo "Run2's output is smaller than $BEAN_TOL beans (-10 pts)" >> $REPORT
-      ((GRADE = GRADE - 10))
-    elif (($? == 3)); then
-      echo "Run2's output is not correct (-10 pts)" >> $REPORT
-      ((GRADE = GRADE - 10))
-    fi
+    case "$?" in
+      1)
+        echo "Run2's output is larger than $BEAN_TOL beans (-10 pts)" >> $REPORT
+        ((GRADE = GRADE - 10))
+      ;;
+      2)
+        echo "Run2's output is smaller than $BEAN_TOL beans (-10 pts)" >> $REPORT
+        ((GRADE = GRADE - 10))
+      ;;
+      3)
+        echo "Run2's output is not correct (-10 pts)" >> $REPORT
+        ((GRADE = GRADE - 10))
+      ;;
+    esac
+    # check run3 output
+    echo "Run3:"
     grep -oE "[0-9]+" run3.messages > run3.out
-    if ((BEAN_CNT > 442)) && ((BEAN_CNT-442 > BEAN_TOL)); then
+    if [ -s run3.out ]; then
       echo "Run3's output is not correct (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
     fi
@@ -186,38 +199,42 @@ if [ -s py.files ]; then        # Only if py file exists
       case "$i" in
         1)
           jar='cup'
-          echo "Checking $jar output..."
+          echo "Run4: Checking $jar output..."
           find_jar_number 1 2 run4.messages # cup
         ;;
         2)
           jar='pint'
-          echo "Checking $jar output..." 
+          echo "Run4: Checking $jar output..." 
           find_jar_number 2 2 run4.messages # pint
         ;;
         3) 
           jar='quart'
-          echo "Checking $jar output..."
+          echo "Run4: Checking $jar output..."
           find_jar_number 3 1 run4.messages # quart
         ;;
         4)
           jar='half'
-          echo "Checking $jar output..."
+          echo "Run4: Checking $jar output..."
           find_jar_number 4 3 run4.messages # half
         ;;
       esac
-      if (($? == 1)); then
-        echo "Run4's output is larger than $BEAN_TOL beans in $jar (-10 pts)" >> $REPORT
-        ((GRADE = GRADE - 10))
-      elif (($? == 2)); then
-        echo "Run4's output is smaller than $BEAN_TOL beans in $jar (-10 pts)" >> $REPORT
-        ((GRADE = GRADE - 10))
-      elif (($? == 3)); then
-        echo "Run4's output is not correct in $jar (-10 pts)" >> $REPORT
-        ((GRADE = GRADE - 10))
-      fi
-      if (($? != 0)); then
-        break # found error so exit...
-      fi
+      case "$?" in
+        1)
+          echo "Run4's output is larger than $BEAN_TOL beans in $jar (-10 pts)" >> $REPORT
+          ((GRADE = GRADE - 10))
+          break # found error so exit...
+        ;;
+        2)
+          echo "Run4's output is smaller than $BEAN_TOL beans in $jar (-10 pts)" >> $REPORT
+          ((GRADE = GRADE - 10))
+          break # found error so exit...
+        ;;
+        3)
+          echo "Run4's output is not correct in $jar (-10 pts)" >> $REPORT
+          ((GRADE = GRADE - 10))
+          break # found error so exit...
+        ;;
+      esac
     done
     rm *.out
 
