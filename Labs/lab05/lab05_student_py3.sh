@@ -4,6 +4,7 @@
 # cse20-01 (Beginning Programming in Python) - Spring 2020
 #
 
+# global constants -----------------------------
 BEAN_TOL=3
 
 # helper functions -----------------------------
@@ -12,8 +13,11 @@ find_jar_number() { # $1==jar_type ; $2==num_of_occurances ; $3==file
   #
   case "$1" in
     1)
-      BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "half" | grep -oE "[0-9]+")
+      BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "cup" | grep -oE "[0-9]+")
       NUM_OCCURANCES=$(grep -c "$BEAN_CNT")
+      #
+      echo "...cup: beans=$BEAN_CNT, num_of_times=$NUM_OCCURANCES"
+      #
       if ((BEAN_CNT > 221)) && ((BEAN_CNT-221 > BEAN_TOL)); then
         STATUS=1
       elif ((BEAN_CNT < 221)) && ((221-BEAN_CNT > BEAN_TOL)); then
@@ -23,8 +27,11 @@ find_jar_number() { # $1==jar_type ; $2==num_of_occurances ; $3==file
       fi
     ;;
     2)
-      BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "quart" | grep -oE "[0-9]+")
+      BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "pint" | grep -oE "[0-9]+")
       NUM_OCCURANCES=$(grep -c "$BEAN_CNT")
+      #
+      echo "...pint: beans=$BEAN_CNT, num_of_times=$NUM_OCCURANCES"
+      #
       if ((BEAN_CNT > 442)) && ((BEAN_CNT-442 > BEAN_TOL)); then
         STATUS=1
       elif ((BEAN_CNT < 442)) && ((442-BEAN_CNT > BEAN_TOL)); then
@@ -34,8 +41,11 @@ find_jar_number() { # $1==jar_type ; $2==num_of_occurances ; $3==file
       fi
     ;;
     3)
-      BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "pint" | grep -oE "[0-9]+")
+      BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "quart" | grep -oE "[0-9]+")
       NUM_OCCURANCES=$(grep -c "$BEAN_CNT")
+      #
+      echo "...quart: beans=$BEAN_CNT, num_of_times=$NUM_OCCURANCES"
+      #
       if ((BEAN_CNT > 883)) && ((BEAN_CNT-883 > BEAN_TOL)); then
         STATUS=1
       elif ((BEAN_CNT < 883)) && ((883-BEAN_CNT > BEAN_TOL)); then
@@ -45,11 +55,14 @@ find_jar_number() { # $1==jar_type ; $2==num_of_occurances ; $3==file
       fi
     ;;
     4)
-      BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "cup" | grep -oE "[0-9]+")
+      BEAN_CNT=$(grep -E "[0-9]+" $3 | grep -m 1 "half" | grep -oE "[0-9]+")
       NUM_OCCURANCES=$(grep -c "$BEAN_CNT")
-      if ((BEAN_CNT > 221)) && ((BEAN_CNT-221 > BEAN_TOL)); then
+      #
+      echo "...half: beans=$BEAN_CNT, num_of_times=$NUM_OCCURANCES"
+      #
+      if ((BEAN_CNT > 1765)) && ((BEAN_CNT-1765 > BEAN_TOL)); then
         STATUS=1
-      elif ((BEAN_CNT < 221)) && ((221-BEAN_CNT > BEAN_TOL)); then
+      elif ((BEAN_CNT < 1765)) && ((1765-BEAN_CNT > BEAN_TOL)); then
         STATUS=2
       elif (($NUM_OCCURANCES != $2)); then
         STATUS=3
@@ -168,33 +181,38 @@ if [ -s py.files ]; then        # Only if py file exists
       ((GRADE = GRADE - 10))
     fi
     # check run4 output
-    for ((i=0;i<4;i++)); do
+    for ((i=1;i<5;i++)); do
+      jar=''
       case "$i" in
         1)
-          echo "Checking 'cup' output..."
+          jar='cup'
+          echo "Checking $jar output..."
           find_jar_number 1 2 run4.messages # cup
         ;;
         2)
-          echo "Checking 'pint' output..." 
+          jar='pint'
+          echo "Checking $jar output..." 
           find_jar_number 2 2 run4.messages # pint
         ;;
         3) 
-          echo "Checking 'quart' output..."
+          jar='quart'
+          echo "Checking $jar output..."
           find_jar_number 3 1 run4.messages # quart
         ;;
         4)
-          echo "Checking 'half' output..."
+          jar='half'
+          echo "Checking $jar output..."
           find_jar_number 4 3 run4.messages # half
         ;;
       esac
       if (($? == 1)); then
-        echo "Run4's output is larger than $BEAN_TOL beans (-10 pts)" >> $REPORT
+        echo "Run4's output is larger than $BEAN_TOL beans in $jar (-10 pts)" >> $REPORT
         ((GRADE = GRADE - 10))
       elif (($? == 2)); then
-        echo "Run4's output is smaller than $BEAN_TOL beans (-10 pts)" >> $REPORT
+        echo "Run4's output is smaller than $BEAN_TOL beans in $jar (-10 pts)" >> $REPORT
         ((GRADE = GRADE - 10))
       elif (($? == 3)); then
-        echo "Run4's output is not correct (-10 pts)" >> $REPORT
+        echo "Run4's output is not correct in $jar (-10 pts)" >> $REPORT
         ((GRADE = GRADE - 10))
       fi
       if (($? != 0)); then
