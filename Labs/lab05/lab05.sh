@@ -19,12 +19,12 @@ for i in $(ls .); do
   
   if [ -d "$i" ]; then
     echo "Inside $i ..." 
-    cp lab05_student_py3.sh $i  # copy individual script
+    cp lab05_student.sh $i  # copy individual script
     cp run*.txt $i          # copy four test files
     cd $i
     #
-    sh lab05_student_py3.sh
-    rm lab05_student_py3.sh     # now remove them
+    sh lab05_student.sh
+    rm lab05_student.sh     # now remove them
     rm run*.txt
     #
     cd ..
