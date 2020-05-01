@@ -53,48 +53,27 @@ if [ -s py.files ]; then        # Only if py file exists
      
     #trap '' INT
     ###################################
-    # Run1: check drawing 1st Fibonacci Square  
+    # Run1:  
     cat run1.txt | python3 $name &> run1.messages
-    find_fib_square 1 0 run1.messages run1.out
-    if [ ! -s run1.out ]; then
-      echo "Good, no drawing for 1st Fibonacci Square"
-    fi
     #----------------------------------
-    # Run2: check drawing 4th Fibonacci Square
+    # Run2: 
     cat run2.txt | python3 $name &> run2.messages
-    find_fib_square 2 0 run2.messages run2.out
-    if [ -s run2.out ]; then
-      echo "Good, drawing here for 4th Fibonacci Square"
-    fi
     #----------------------------------
-    # Run3: check drawing 10th Fibonacci Square
+    # Run3: 
     cat run3.txt | python3 $name &> run3.messages
-    find_fib_square 34 32 run3.messages run3.out
-    if [ -s run3.out ]; then
-      echo "Good, drawing here for 10th Fibonacci Square"
-    fi
     #----------------------------------
-    # Run4: check drawing 10th Fibonacci Square and all below
+    # Run4: 
     cat run4.txt | python3 $name &> run4.messages
-    for ((fib_num=10; fib_num>0; fib_num--)); do
-      calc_fib_num $fib_num
-      val1=$? # return value from calc_fib_num() above
-      val2=$(( $val1 - 2 ))
-      find_fib_square $val1 $val2 run4.messages run4.out
-      if [ ! -s run4.out ] && (( fib_num>1 )); then
-        echo "Didn't draw $fib_num th Fibonacci Square (-5 pts)" >> $REPORT
-        ((GRADE = GRADE - 5))
-        break # found Fib. Square that wasn't drawn
-      else
-        echo "$fib_num works out..."
-      fi
-    done
+    #----------------------------------
+    # Run5: 
+    cat run5.txt | python3 $name &> run5.messages
     ###################################
     #trap '-'
     grep "[Ee]rror" run1.messages | grep -v "EOFError" > err.messages
     grep "[Ee]rror" run2.messages | grep -v "EOFError" >> err.messages
     grep "[Ee]rror" run3.messages | grep -v "EOFError" >> err.messages
     grep "[Ee]rror" run4.messages | grep -v "EOFError" >> err.messages
+    grep "[Ee]rror" run5.messages | grep -v "EOFError" >> err.messages
       
     echo "" >> $REPORT
     # print code run
@@ -114,23 +93,37 @@ if [ -s py.files ]; then        # Only if py file exists
     echo "python3 $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run4.messages >> $REPORT
+    echo "---------- python run5 -----------" >> $REPORT
+    echo "python3 $basename" >> $REPORT
+    #echo "" >> $REPORT
+    grep -n "" run5.messages >> $REPORT
     echo "----------------------------------" >> $REPORT
     #
 
-    # check run1 output: 1st Fib. Square
+    # check run1 output: 
     if [ -s run1.out ]; then
-      echo "Drew a Fibonacci Square for 1st (-10 pts)" >> $REPORT
-      ((GRADE = GRADE - 10))
+      echo "Run1 (-5 pts)" >> $REPORT
+      ((GRADE = GRADE - 5))
     fi
-    # check run2 output: 4th Fib. Square
+    # check run2 output: 
     if [ ! -s run2.out ]; then
-      echo "Incorrect Fibonacci Square for 4th (-10 pts)" >> $REPORT
-      ((GRADE = GRADE - 10))
+      echo "Run2 (-5 pts)" >> $REPORT
+      ((GRADE = GRADE - 5))
     fi
-    # check run3 output: 10th Fib. Square
+    # check run3 output: 
     if [ ! -s run3.out ]; then
-      echo "Incorrect Fibonacci Square for 10th (-20 pts)" >> $REPORT
-      ((GRADE = GRADE - 20))
+      echo "Run3 (-15 pts)" >> $REPORT
+      ((GRADE = GRADE - 15))
+    fi
+    # check run4 output: 
+    if [ ! -s run4.out ]; then
+      echo "Run4 (-15 pts)" >> $REPORT
+      ((GRADE = GRADE - 15))
+    fi
+    # check run5 output: 
+    if [ ! -s run5.out ]; then
+      echo "Run5 (-10 pts)" >> $REPORT
+      ((GRADE = GRADE - 10))
     fi
     rm run*.out
 
