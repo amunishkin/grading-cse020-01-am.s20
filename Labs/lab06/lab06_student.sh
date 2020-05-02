@@ -54,13 +54,13 @@ if [ -s py.files ]; then        # Only if py file exists
     #trap '' INT
     ###################################
     # Run1:
-    cat run1.txt | python3 $name &> run1.messages
+    cat run1.txt | python $name &> run1.messages
     # Run2:
-    cat run2.txt | python3 $name &> run2.messages
+    cat run2.txt | python $name &> run2.messages
     # Run3:
-    cat run3.txt | python3 $name &> run3.messages
+    cat run3.txt | python $name &> run3.messages
     # Run4:
-    cat run4.txt | python3 $name &> run4.messages
+    cat run4.txt | python $name &> run4.messages
     ###################################
     #trap '-'
     grep "[Ee]rror" run1.messages | grep -v "EOFError" > err.messages
@@ -70,19 +70,19 @@ if [ -s py.files ]; then        # Only if py file exists
       
     # print code run
     echo "---------- python run1 -----------" >> $REPORT
-    echo "python3 $basename" >> $REPORT
+    echo "python $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run1.messages >> $REPORT
     echo "---------- python run2 -----------" >> $REPORT
-    echo "python3 $basename" >> $REPORT
+    echo "python $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run2.messages >> $REPORT
     echo "---------- python run3 -----------" >> $REPORT
-    echo "python3 $basename" >> $REPORT
+    echo "python $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run3.messages >> $REPORT
     echo "---------- python run4 -----------" >> $REPORT
-    echo "python3 $basename" >> $REPORT
+    echo "python $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run4.messages >> $REPORT
     echo "----------------------------------" >> $REPORT
