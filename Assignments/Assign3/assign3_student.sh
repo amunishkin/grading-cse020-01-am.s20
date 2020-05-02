@@ -55,15 +55,15 @@ if [ -s py.files ]; then        # Only if py file exists
     MAX_CNT=20
     ###################################
     # Run1:  
-    cat run1.txt | python3 $name &> run1.messages
+    cat run1.txt | python $name &> run1.messages
     grep -E "[Cc]ome again" run1.messages > run1.out
     #----------------------------------
     # Run2: 
-    cat run2.txt | python3 $name &> run2.messages
+    cat run2.txt | python $name &> run2.messages
     grep -E "[Cc]ome again" run2.messages > run2.out
     #----------------------------------
     # Run3: 
-    cat run3.txt | python3 $name &> run3.messages
+    cat run3.txt | python $name &> run3.messages
     CNT=$(grep -cE "[Ss]orry we don't have" run3.messages | grep -oE "[0-9]+")
     if ((CNT == 2)); then
       echo "Handled buying items **not** in store" > run3.out
@@ -71,7 +71,7 @@ if [ -s py.files ]; then        # Only if py file exists
     fi
     #----------------------------------
     # Run4: let's make sure shopping store logic works out
-    cat run4.txt | python3 $name &> run4.messages
+    cat run4.txt | python $name &> run4.messages
     ROUNDS=$(grep -cE "[Cc]ontinue shopping" run4.messages | grep -oE "[0-9]+")
     CNT=$(grep -cE "[4.95]" run4.messages | grep -oE "[0-9]+")
     if ((ROUNDS > 1)) && ((CNT > 1)); then
@@ -82,7 +82,7 @@ if [ -s py.files ]; then        # Only if py file exists
     # Run5: let's try to get a discount... could be random
     for ((cnt=1; cnt<=MAX_CNT; cnt++)); do # based on example_output.txt should
                                            #  statistically should take 10 buys
-      cat run4.txt | python3 $name &> run5.messages
+      cat run4.txt | python $name &> run5.messages
       grep -E "[Cc]ongratulations" run5.messages > run5.out
       if [ -s run5.out ]; then
         echo "Discount found at $cnt"
@@ -103,23 +103,23 @@ if [ -s py.files ]; then        # Only if py file exists
     echo "" >> $REPORT
     # print code run
     echo "---------- python run1 -----------" >> $REPORT
-    echo "python3 $basename" >> $REPORT
+    echo "python $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run1.messages >> $REPORT
     echo "---------- python run2 -----------" >> $REPORT
-    echo "python3 $basename" >> $REPORT
+    echo "python $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run2.messages >> $REPORT
     echo "---------- python run3 -----------" >> $REPORT
-    echo "python3 $basename" >> $REPORT
+    echo "python $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run3.messages >> $REPORT
     echo "---------- python run4 -----------" >> $REPORT
-    echo "python3 $basename" >> $REPORT
+    echo "python $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run4.messages >> $REPORT
     echo "---------- python run5 -----------" >> $REPORT
-    echo "python3 $basename" >> $REPORT
+    echo "python $basename" >> $REPORT
     #echo "" >> $REPORT
     grep -n "" run5.messages >> $REPORT
     echo "----------------------------------" >> $REPORT
