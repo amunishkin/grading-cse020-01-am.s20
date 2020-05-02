@@ -52,21 +52,46 @@ if [ -s py.files ]; then        # Only if py file exists
     rm base.name
      
     #trap '' INT
+    MAX_CNT=100
     ###################################
     # Run1:  
     cat run1.txt | python3 $name &> run1.messages
+    grep -E "[Cc]ome again" run1.messages > run1.out
     #----------------------------------
     # Run2: 
     cat run2.txt | python3 $name &> run2.messages
+    grep -E "[Cc]ome again" run2.messages > run2.out
     #----------------------------------
     # Run3: 
     cat run3.txt | python3 $name &> run3.messages
+    CNT=$(grep -cE "[Ss]orry we don't have" run3.messages | grep -oE "[0-9]+")
+    if ((CNT == 2)); then
+      echo "Handled buying items **not** in store" > run3.txt
+      cat run3.txt
+    fi
     #----------------------------------
-    # Run4: 
+    # Run4: let's make sure shopping store logic works out
     cat run4.txt | python3 $name &> run4.messages
+    ROUNDS=$(grep -cE "[Cc]ontinue shopping" run4.messages | grep -oE "[0-9]+")
+    CNT=$(grep -cE "[4.95]" run4.messages | grep -oE "[0-9]+")
+    if ((ROUNDS > 1)) && ((CNT > 1)); then
+      echo "At least two rounds with costs! Took $cnt" > run4.out
+      cat run4.out
+    fi
     #----------------------------------
-    # Run5: 
-    cat run5.txt | python3 $name &> run5.messages
+    # Run5: let's try to get a discount... could be random
+    for ((cnt=1; cnt<=MAX_CNT; cnt++)); do # based on example_output.txt should
+                                           #  statistically should take 10 buys
+      cat run4.txt | python3 $name &> run5.messages
+      grep -E "[Cc]ongratulations" run5.messages > run5.out
+      if [ -s run5.out ]; then
+        echo "Discount found at $cnt"
+        break # Ok, found discount
+      fi
+      if ((cnt == MAX_CNT)); then
+        echo "Please rerun -- test not accurate"
+      fi
+    done
     ###################################
     #trap '-'
     grep "[Ee]rror" run1.messages | grep -v "EOFError" > err.messages
@@ -101,28 +126,28 @@ if [ -s py.files ]; then        # Only if py file exists
     #
 
     # check run1 output: 
-    if [ -s run1.out ]; then
-      echo "Run1 (-5 pts)" >> $REPORT
+    if [ ! -s run1.out ]; then
+      echo "Found no exit message in Run1 (-5 pts)" >> $REPORT
       ((GRADE = GRADE - 5))
     fi
     # check run2 output: 
     if [ ! -s run2.out ]; then
-      echo "Run2 (-5 pts)" >> $REPORT
+      echo "Found no exit message in Run2 (-5 pts)" >> $REPORT
       ((GRADE = GRADE - 5))
     fi
     # check run3 output: 
     if [ ! -s run3.out ]; then
-      echo "Run3 (-15 pts)" >> $REPORT
+      echo "Make sure you handle buying items **not** in the store in Run3 (-15 pts)" >> $REPORT
       ((GRADE = GRADE - 15))
     fi
     # check run4 output: 
     if [ ! -s run4.out ]; then
-      echo "Run4 (-15 pts)" >> $REPORT
+      echo "Make sure you handle buying items in the store in Run4 (-15 pts)" >> $REPORT
       ((GRADE = GRADE - 15))
     fi
     # check run5 output: 
     if [ ! -s run5.out ]; then
-      echo "Run5 (-10 pts)" >> $REPORT
+      echo "Couldn't find discounted item in the store in Run5 (-10 pts)" >> $REPORT
       ((GRADE = GRADE - 10))
     fi
     rm run*.out
