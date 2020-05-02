@@ -1,0 +1,14 @@
+yes
+Customer123
+eggs
+yes
+yes
+pizza
+no
+yes
+ice tea
+yes
+yes
+potato soup
+no
+no
