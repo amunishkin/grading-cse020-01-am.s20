@@ -64,7 +64,7 @@ if [ -s py.files ]; then        # Only if py file exists
     #----------------------------------
     # Run3: 
     cat run3.txt | python3 $name &> run3.messages
-    CNT=$(grep -cE "[Ss]orry we don't have" run3.messages | grep -oE "[0-9]+")
+    CNT=$(grep -cE "[Ss]orry[, ] we don't have" run3.messages | grep -oE "[0-9]+")
     if ((CNT == 2)); then
       echo "Handled buying items **not** in store" > run3.out
       cat run3.out
