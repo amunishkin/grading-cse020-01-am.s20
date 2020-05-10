@@ -1,0 +1,13 @@
+yes
+hello
+yes
+my
+yes
+name
+yes
+is
+yes
+Alex
+yes
+
+no
