@@ -1,0 +1,3 @@
+Math obj1 value =  25
+Math obj1 value =  0
+Math obj1 value =  5.0

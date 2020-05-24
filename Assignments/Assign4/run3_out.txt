@@ -1,0 +1,4 @@
+Math obj1 value =  14.0
+Math obj1 value =  19.0
+Math obj2 value =  5.0
+Math obj1 value =  576.0

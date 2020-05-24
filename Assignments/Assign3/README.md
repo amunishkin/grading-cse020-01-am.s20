@@ -17,7 +17,7 @@
 * Make sure to move both "assign3.sh" and "assign3_student.sh" in 
     same directory as where all student directories are located.
     Also move four txt run{1,2,3,4} files here too.
-* Run by clicking on assign2.sh or open a terminal and type
+* Run by clicking on assign3.sh or open a terminal and type
     "sh assign3.sh"
 * Runs assign3_student for each student directory
 * Creates a csv file with student name and score
