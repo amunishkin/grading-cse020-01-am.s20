@@ -5,8 +5,8 @@ Testing platform part3 for MathLib module
 """
 
 if __name__ == '__main__':
-    math_obj1 = math.MyMathLib()
-    math_obj2 = math.MyMathLib(75)
+    math_obj1 = math.MyMathLib(0.0)
+    math_obj2 = math.MyMathLib(75.0)
 
     math_obj1.add(14)
     math_obj1.mult(1)

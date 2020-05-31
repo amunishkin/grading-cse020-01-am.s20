@@ -80,18 +80,21 @@ if [ -s py.files ]; then        # Only if py file exists
     diff -iEZb run1_out.txt run1.messages > run1.out
     if [ -s run1.out ]; then
       echo "Run1 is incorrect (-15 pts)" >> $REPORT
+      cat run1.out >> $REPORT
       ((GRADE = GRADE - 15))
     fi
     # check run2 output: 
     diff -iEZb run2_out.txt run2.messages > run2.out
     if [ -s run2.out ]; then
       echo "Run2 is incorrect (-15 pts)" >> $REPORT
+      cat run2.out >> $REPORT
       ((GRADE = GRADE - 15))
     fi
     # check run3 output: 
     diff -iEZb run3_out.txt run3.messages > run3.out
     if [ -s run3.out ]; then
       echo "Run3 is incorrect (-20 pts)" >> $REPORT
+      cat run3.out >> $REPORT
       ((GRADE = GRADE - 20))
     fi
     rm run*.out

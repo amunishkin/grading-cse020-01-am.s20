@@ -1,3 +1,3 @@
-Math obj1 value =  2
+Math obj1 value =  2.0
 Math obj2 value =  -0.5
 Math obj3 value =  0.0
